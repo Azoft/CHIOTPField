@@ -165,7 +165,16 @@ open class CHIOTPField<Label: POTPLabel>: UITextField, UITextFieldDelegate {
     }
 
     private func changeText(oldValue: String?, newValue: String?) {
-        guard let text = text, text.count <= numberOfDigits else { return }
+        if newValue?.isEmpty ?? true {
+            labels.enumerated().forEach({ (i, label) in
+                label.text = nil
+                label.updateState()
+            })
+            updateFocus()
+            return
+        }
+        
+        guard let text = newValue, text.count <= numberOfDigits else { return }
 
         labels.enumerated().forEach({ (i, label) in
 
